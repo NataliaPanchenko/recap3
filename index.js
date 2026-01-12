@@ -13,4 +13,3 @@ const maxPage = 1;
 const page = 1;
 const searchQuery = "";
 
-async 
