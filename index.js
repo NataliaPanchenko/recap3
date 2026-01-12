@@ -15,8 +15,8 @@ const searchQuery = "";
 
 async function fetchCharacters() {
   const response = await fetch("https://rickandmortyapi.com/api/character");
-  const character = await response.json();
-  console.log(character);
+  const characters = await response.json();
+  console.log(characters);
 }
 
 fetchCharacters();
