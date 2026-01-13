@@ -16,22 +16,29 @@ let page = 1;
 let searchQuery = "";
 
 async function fetchCharacters(page, searchQuery) {
-  const response = await fetch(
-    `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`
-  );
-  const characters = await response.json();
+  try {
+    const response = await fetch(
+      `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`
+    );
+    const characters = await response.json();
 
-  prevButton.disabled = characters.info.prev === null;
+    prevButton.disabled = characters.info.prev === null;
 
-  cardContainer.innerHTML = "";
-  maxPage = characters.info.pages;
+    cardContainer.innerHTML = "";
+    maxPage = characters.info.pages;
 
-  pagination.textContent = `${page} / ${maxPage}`;
-  characters.results.forEach((character) => {
-    const cardList = createCharacterCard(character);
-    cardContainer.append(cardList);
-    nextButton.disabled = characters.info.next === null;
-  });
+    pagination.textContent = `${page} / ${maxPage}`;
+    characters.results.forEach((character) => {
+      const cardList = createCharacterCard(character);
+      cardContainer.append(cardList);
+      nextButton.disabled = characters.info.next === null;
+    });
+  } catch (e) {
+    const errorMessage = document.createElement("span");
+    errorMessage.textContent =
+      "Keine Übereinstimmung gefunden. Bitte Eingabe überprüfen.";
+    cardContainer.append(errorMessage);
+  }
 }
 fetchCharacters(page, searchQuery);
 nextButton.addEventListener("click", () => {
@@ -46,6 +53,7 @@ prevButton.addEventListener("click", () => {
 });
 
 searchBar.addEventListener("submit", (event) => {
+  cardContainer.innerHTML = "";
   event.preventDefault();
   const formData = new FormData(event.target);
   const data = Object.fromEntries(formData);
@@ -53,6 +61,8 @@ searchBar.addEventListener("submit", (event) => {
   searchQuery = data.query;
   console.log("searchbar", searchQuery);
   page = 1;
+
   fetchCharacters(page, searchQuery);
+
   searchBar.reset();
 });
