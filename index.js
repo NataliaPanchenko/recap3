@@ -20,20 +20,21 @@ async function fetchCharacters(page, searchQuery) {
     const response = await fetch(
       `https://rickandmortyapi.com/api/character/?page=${page}&name=${searchQuery}`
     );
-    const characters = await response.json();
+    const data = await response.json();
 
-    prevButton.disabled = characters.info.prev === null;
+    prevButton.disabled = data.info.prev === null;
+    nextButton.disabled = data.info.next === null;
 
     cardContainer.innerHTML = "";
-    maxPage = characters.info.pages;
+    maxPage = data.info.pages;
 
     pagination.textContent = `${page} / ${maxPage}`;
-    characters.results.forEach((character) => {
+    data.results.forEach((character) => {
       const cardList = createCharacterCard(character);
       cardContainer.append(cardList);
-      nextButton.disabled = characters.info.next === null;
     });
   } catch (e) {
+    cardContainer.innerHTML = "";
     const errorMessage = document.createElement("span");
     errorMessage.textContent =
       "Keine Übereinstimmung gefunden. Bitte Eingabe überprüfen.";
@@ -53,16 +54,11 @@ prevButton.addEventListener("click", () => {
 });
 
 searchBar.addEventListener("submit", (event) => {
-  cardContainer.innerHTML = "";
   event.preventDefault();
   const formData = new FormData(event.target);
   const data = Object.fromEntries(formData);
-  console.log("data", data);
   searchQuery = data.query;
-  console.log("searchbar", searchQuery);
   page = 1;
 
   fetchCharacters(page, searchQuery);
-
-  searchBar.reset();
 });
