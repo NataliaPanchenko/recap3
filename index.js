@@ -21,6 +21,8 @@ async function fetchCharacters(page) {
   );
   const characters = await response.json();
   console.log(characters);
+  prevButton.disabled = characters.info.prev === null;
+
   cardContainer.innerHTML = "";
   maxPage = characters.info.pages;
   console.log("maxPage", maxPage);
@@ -28,6 +30,7 @@ async function fetchCharacters(page) {
   characters.results.forEach((character) => {
     const cardList = createCharacterCard(character);
     cardContainer.append(cardList);
+    nextButton.disabled = characters.info.next === null;
   });
 }
 fetchCharacters(page);
@@ -37,10 +40,7 @@ nextButton.addEventListener("click", () => {
   fetchCharacters(page);
 });
 prevButton.addEventListener("click", () => {
-  /*  console.log("prev",characters.info.prev);*/
   page--;
-
   console.log("page", page);
   fetchCharacters(page);
-  /* characters.info.prev ===null?prevButton.disabled: */
 });
