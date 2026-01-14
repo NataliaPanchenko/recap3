@@ -1,5 +1,7 @@
 .search-bar-container {
   width: 300px;
+  position: sticky;
+  top: 63px;
 }
 
 .search-bar {
@@ -7,6 +9,7 @@
   background-color: var(--color-secondary);
   display: grid;
   grid-template-columns: 1fr 24px;
+  background-color: lightyellow;
 }
 
 .search-bar__input {
@@ -18,6 +21,7 @@
 .search-bar__button {
   border: none;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .search-bar__input:focus {
